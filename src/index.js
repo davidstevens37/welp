@@ -16,9 +16,7 @@ class WelpComponent extends Component {
 
   componentDidMount() {
     this.mounted = true;
-  }
 
-  componentWillMount() {
     if (!this.stores) {
       throw new Error('You must have a stores array property');
     }
@@ -28,6 +26,8 @@ class WelpComponent extends Component {
     this.stores.forEach(store => {
       store.addChangeListener(this.handleStoresChanged);
     }, this);
+    
+    this.didMount();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -40,7 +40,11 @@ class WelpComponent extends Component {
       store.removeChangeListener(this.handleStoresChanged);
     }, this);
   }
-
+  
+  didMount() {
+    // noop - hook for component to define things to happen when `componentDidMount`
+  }
+  
   getStateFromStores() {
     if (this.stores.length > 1) {
       return this.stores.reduce((a, b) => a.getDataStructure().merge(b.getDataStructure())).toJS();
